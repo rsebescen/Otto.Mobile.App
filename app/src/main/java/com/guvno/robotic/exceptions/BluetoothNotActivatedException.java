@@ -1,4 +1,4 @@
 package com.guvno.robotic.exceptions;
 
-class BluetoothNotActivatedException {
+public class BluetoothNotActivatedException extends Throwable {
 }

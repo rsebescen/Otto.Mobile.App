@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../GaveUpOnNavigation.iml" filepath="$PROJECT_DIR$/../GaveUpOnNavigation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Otto.Mobile.App.iml" filepath="$PROJECT_DIR$/../Otto.Mobile.App.iml" />
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" />
     </modules>
   </component>

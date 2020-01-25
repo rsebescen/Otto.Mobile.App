@@ -33,6 +33,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.guvno.robotic.exceptions.BluetoothNotActivatedException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -51,8 +53,6 @@ public class BluetoothSettings extends Fragment {
     private Button mListPairedDevicesBtn;
     private Button mDiscoverBtn;
     private Button mDoTheDanceBtn;
-    public static BluetoothAdapter mBTAdapter;
-    public static Set<BluetoothDevice> mPairedDevices;
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
     private CheckBox mLED1;
@@ -62,12 +62,6 @@ public class BluetoothSettings extends Fragment {
     private ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
     private BluetoothSocket mBTSocket = null; // bi-directional client-to-client data path
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
-
-
-    // #defines for identifying shared types between calling functions
-    private final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
-    private final static int MESSAGE_READ = 2; // used in bluetooth handler to identify message update
-    private final static int CONNECTING_STATUS = 3; // used in bluetooth handler to identify message status
 
     public BluetoothSettings() {
         // Required empty public constructor
@@ -89,7 +83,6 @@ public class BluetoothSettings extends Fragment {
         mLED1 = (CheckBox)view.findViewById(R.id.checkboxLED1);
 
         mBTArrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1);
-        mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
 
         mDevicesListView = (ListView)view.findViewById(R.id.devicesListView);
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
@@ -102,7 +95,7 @@ public class BluetoothSettings extends Fragment {
 
         mHandler = new Handler(){
             public void handleMessage(android.os.Message msg){
-                if(msg.what == MESSAGE_READ){
+                if(msg.what == BluetoothSettingsRepository.MESSAGE_READ){
                     String readMessage = null;
                     try {
                         readMessage = new String((byte[]) msg.obj, "UTF-8");
@@ -112,7 +105,7 @@ public class BluetoothSettings extends Fragment {
                     mReadBuffer.setText(readMessage);
                 }
 
-                if(msg.what == CONNECTING_STATUS){
+                if(msg.what == BluetoothSettingsRepository.CONNECTING_STATUS){
                     if(msg.arg1 == 1)
                         mBluetoothStatus.setText("Connected to Device: " + (String)(msg.obj));
                     else
@@ -177,9 +170,9 @@ public class BluetoothSettings extends Fragment {
 //        return inflater.inflate(R.layout.fragment_bluetooth_settings, container, false);
 //    }
     private void bluetoothOn(View view){
-        if (!mBTAdapter.isEnabled()) {
+        if (!BluetoothSettingsRepository.getInstance().mBTAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            startActivityForResult(enableBtIntent, BluetoothSettingsRepository.REQUEST_ENABLE_BT);
             mBluetoothStatus.setText("Bluetooth enabled");
             Toast.makeText(getActivity().getApplicationContext(),"Bluetooth turned on",Toast.LENGTH_SHORT).show();
 
@@ -190,21 +183,21 @@ public class BluetoothSettings extends Fragment {
     }
 
     private void bluetoothOff(View view){
-        mBTAdapter.disable(); // turn off
+        BluetoothSettingsRepository.getInstance().mBTAdapter.disable(); // turn off
         mBluetoothStatus.setText("Bluetooth disabled");
         Toast.makeText(getActivity().getApplicationContext(),"Bluetooth turned Off", Toast.LENGTH_SHORT).show();
     }
 
     private void discover(View view){
         // Check if the device is already discovering
-        if(mBTAdapter.isDiscovering()){
-            mBTAdapter.cancelDiscovery();
+        if(BluetoothSettingsRepository.getInstance().mBTAdapter.isDiscovering()){
+            BluetoothSettingsRepository.getInstance().mBTAdapter.cancelDiscovery();
             Toast.makeText(getActivity().getApplicationContext(),"Discovery stopped",Toast.LENGTH_SHORT).show();
         }
         else{
-            if(mBTAdapter.isEnabled()) {
+            if(BluetoothSettingsRepository.getInstance().mBTAdapter.isEnabled()) {
                 mBTArrayAdapter.clear(); // clear items
-                mBTAdapter.startDiscovery();
+                BluetoothSettingsRepository.getInstance().mBTAdapter.startDiscovery();
                 Toast.makeText(getActivity().getApplicationContext(), "Discovery started", Toast.LENGTH_SHORT).show();
                 getActivity().registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
             }
@@ -229,22 +222,19 @@ public class BluetoothSettings extends Fragment {
 
     private void listPairedDevices(View view){
         mBTArrayAdapter.clear();
-        mPairedDevices = mBTAdapter.getBondedDevices();
-        if(mBTAdapter.isEnabled()) {
-            // put it's one to the adapter
-            for (BluetoothDevice device : mPairedDevices)
-                mBTArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-
+        try {
+            for (String device : BluetoothSettingsRepository.getInstance().listPairedDevices())
+                mBTArrayAdapter.add(device);
             Toast.makeText(getActivity().getApplicationContext(), "Show Paired Devices", Toast.LENGTH_SHORT).show();
-        }
-        else
+        } catch (BluetoothNotActivatedException e) {
             Toast.makeText(getActivity().getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
 
-            if(!mBTAdapter.isEnabled()) {
+            if(!BluetoothSettingsRepository.getInstance().mBTAdapter.isEnabled()) {
                 Toast.makeText(getActivity().getBaseContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -261,7 +251,7 @@ public class BluetoothSettings extends Fragment {
                 public void run() {
                     boolean fail = false;
 
-                    BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
+                    BluetoothDevice device = BluetoothSettingsRepository.getInstance().mBTAdapter.getRemoteDevice(address);
 
                     try {
                         mBTSocket = createBluetoothSocket(device);
@@ -276,7 +266,7 @@ public class BluetoothSettings extends Fragment {
                         try {
                             fail = true;
                             mBTSocket.close();
-                            mHandler.obtainMessage(CONNECTING_STATUS, -1, -1)
+                            mHandler.obtainMessage(BluetoothSettingsRepository.CONNECTING_STATUS, -1, -1)
                                     .sendToTarget();
                         } catch (IOException e2) {
                             //insert code to deal with this
@@ -287,7 +277,7 @@ public class BluetoothSettings extends Fragment {
                         mConnectedThread = new ConnectedThread(mBTSocket);
                         mConnectedThread.start();
 
-                        mHandler.obtainMessage(CONNECTING_STATUS, 1, -1, name)
+                        mHandler.obtainMessage(BluetoothSettingsRepository.CONNECTING_STATUS, 1, -1, name)
                                 .sendToTarget();
                     }
                 }
@@ -339,7 +329,7 @@ public class BluetoothSettings extends Fragment {
                         SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed.
                         bytes = mmInStream.available(); // how many bytes are ready to be read?
                         bytes = mmInStream.read(buffer, 0, bytes); // record how many bytes we actually read
-                        mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
+                        mHandler.obtainMessage(BluetoothSettingsRepository.MESSAGE_READ, bytes, -1, buffer)
                                 .sendToTarget(); // Send the obtained bytes to the UI activity
                     }
                 } catch (IOException e) {
