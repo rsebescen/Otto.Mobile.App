@@ -48,7 +48,7 @@ public class OttoActions extends Fragment {
 
 
     private void doTheDance(View view){
-        BluetoothSettingsRepository.getInstance().send("0");
+        BluetoothSettingsRepository.getInstance().send("1");
         toast("Make that nigga dance!");
     }
 

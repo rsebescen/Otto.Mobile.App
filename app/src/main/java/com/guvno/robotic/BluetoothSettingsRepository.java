@@ -116,6 +116,16 @@ public class BluetoothSettingsRepository {
         }
     }
 
+
+    public void send(Integer s) {
+        try {
+            mBTSocket.getOutputStream().write(s.byteValue());
+            mBTSocket.getOutputStream().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
