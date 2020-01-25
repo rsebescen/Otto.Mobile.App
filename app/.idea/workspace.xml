@@ -7,11 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d53bf4e0-ab03-40c0-a1f6-1a735d320ec9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettingsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettingsRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guvno/robotic/OttoActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guvno/robotic/OttoActions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_otto_actions.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_otto_actions.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,7 +54,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/res/layout/fragment_otto_actions.xml">
           <provider editor-type-id="android-designer2" />
           <provider selected="true" editor-type-id="text-editor">
@@ -68,11 +64,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettings.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="260" column="46" selection-start-line="260" selection-start-column="31" selection-end-line="260" selection-end-column="46" />
+            <state relative-caret-position="145">
+              <caret line="184" column="41" selection-start-line="184" selection-start-column="41" selection-end-line="184" selection-end-column="41" />
               <folding>
                 <element signature="e#3399#4253#0" expanded="true" />
                 <element signature="e#4252#4253#0" expanded="true" />
@@ -105,6 +101,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.fragment/fragment/1.1.0/b9ebb04df2cb0cad4419af3c658690bc82aa5706/fragment-1.1.0-sources.jar!/androidx/fragment/app/Fragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3008">
+              <caret line="1191" column="16" selection-start-line="1191" selection-start-column="16" selection-end-line="1191" selection-end-column="16" />
+              <folding>
+                <element signature="e#66814#66815#0" expanded="true" />
+                <element signature="e#66842#66843#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettingsRepository.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="215">
@@ -112,15 +121,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guvno/robotic/exceptions/BluetoothNotActivatedException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="63" selection-start-line="2" selection-start-column="63" selection-end-line="2" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -178,10 +178,10 @@
         <option value="$PROJECT_DIR$/src/main/res/layout/fragment_home.xml" />
         <option value="$PROJECT_DIR$/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/guvno/robotic/exceptions/BluetoothNotActivatedException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettings.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettingsRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guvno/robotic/OttoActions.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/fragment_otto_actions.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettings.java" />
       </list>
     </option>
   </component>
@@ -362,9 +362,9 @@
       <window_info anchor="bottom" id="Logcat" order="1" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Find" order="3" weight="0.32891566" />
-      <window_info anchor="bottom" id="Terminal" order="4" weight="0.32891566" />
+      <window_info anchor="bottom" id="Terminal" order="4" visible="true" weight="0.32891566" />
       <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.5007153" side_tool="true" weight="0.32891566" />
-      <window_info anchor="bottom" id="Build" order="6" sideWeight="0.4985694" visible="true" weight="0.2746988" />
+      <window_info anchor="bottom" id="Build" order="6" sideWeight="0.4985694" weight="0.2746988" />
       <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="Run" order="8" weight="0.32891566" />
       <window_info anchor="bottom" id="Debug" order="9" sideWeight="0.49928468" weight="0.32891566" />
@@ -529,17 +529,6 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.fragment/fragment/1.1.0/b9ebb04df2cb0cad4419af3c658690bc82aa5706/fragment-1.1.0-sources.jar!/androidx/fragment/app/Fragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23115">
-          <caret line="1684" column="16" selection-start-line="1684" selection-start-column="16" selection-end-line="1684" selection-end-column="16" />
-          <folding>
-            <element signature="e#66814#66815#0" expanded="true" />
-            <element signature="e#66842#66843#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guvno/robotic/Home.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -592,31 +581,6 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettings.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="260" column="46" selection-start-line="260" selection-start-column="31" selection-end-line="260" selection-end-column="46" />
-          <folding>
-            <element signature="e#3399#4253#0" expanded="true" />
-            <element signature="e#4252#4253#0" expanded="true" />
-            <element signature="e#6071#6234#0" expanded="true" />
-            <element signature="e#6233#6234#0" expanded="true" />
-            <element signature="e#8028#8556#0" expanded="true" />
-            <element signature="e#8555#8556#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettingsRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="112" column="48" selection-start-line="112" selection-start-column="48" selection-end-line="112" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guvno/robotic/OttoActions.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -635,6 +599,42 @@
         </state>
       </provider>
       <provider editor-type-id="android-designer2" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettingsRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="112" column="48" selection-start-line="112" selection-start-column="48" selection-end-line="112" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.fragment/fragment/1.1.0/b9ebb04df2cb0cad4419af3c658690bc82aa5706/fragment-1.1.0-sources.jar!/androidx/fragment/app/Fragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3008">
+          <caret line="1191" column="16" selection-start-line="1191" selection-start-column="16" selection-end-line="1191" selection-end-column="16" />
+          <folding>
+            <element signature="e#66814#66815#0" expanded="true" />
+            <element signature="e#66842#66843#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guvno/robotic/BluetoothSettings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="184" column="41" selection-start-line="184" selection-start-column="41" selection-end-line="184" selection-end-column="41" />
+          <folding>
+            <element signature="e#3399#4253#0" expanded="true" />
+            <element signature="e#4252#4253#0" expanded="true" />
+            <element signature="e#6071#6234#0" expanded="true" />
+            <element signature="e#6233#6234#0" expanded="true" />
+            <element signature="e#8028#8556#0" expanded="true" />
+            <element signature="e#8555#8556#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
