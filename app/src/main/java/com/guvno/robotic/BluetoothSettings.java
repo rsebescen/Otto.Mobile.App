@@ -157,6 +157,13 @@ public class BluetoothSettings extends Fragment {
                     discover(v);
                 }
             });
+
+            mDoTheDanceBtn.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    doTheDance(v);
+                }
+            });
         }
 
         return view;
@@ -205,6 +212,20 @@ public class BluetoothSettings extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void doTheDance(View view){
+        try {
+            mBTSocket.getOutputStream().write("0".getBytes());
+            mBTSocket.getOutputStream().flush();
+        } catch (Exception e) {
+
+        }
+        toast("Make that nigga dance!");
+    }
+
+    private void toast(String message) {
+        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     final BroadcastReceiver blReceiver = new BroadcastReceiver() {
