@@ -57,11 +57,8 @@ public class BluetoothSettings extends Fragment {
     private ListView mDevicesListView;
     private CheckBox mLED1;
 
-    private final String TAG = MainActivity.class.getSimpleName();
     private static Handler mHandler; // Our main handler that will receive callback notifications
-    private ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
-    private BluetoothSocket mBTSocket = null; // bi-directional client-to-client data path
-    private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
+
 
     public BluetoothSettings() {
         // Required empty public constructor
@@ -120,16 +117,6 @@ public class BluetoothSettings extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(),"Bluetooth device not found!",Toast.LENGTH_SHORT).show();
         }
         else {
-
-            mLED1.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    if(mConnectedThread != null) //First check to make sure thread created
-                        mConnectedThread.write("1");
-                }
-            });
-
-
             mScanBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -155,13 +142,6 @@ public class BluetoothSettings extends Fragment {
                 @Override
                 public void onClick(View v){
                     discover(v);
-                }
-            });
-
-            mDoTheDanceBtn.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    doTheDance(v);
                 }
             });
         }
@@ -214,16 +194,6 @@ public class BluetoothSettings extends Fragment {
         }
     }
 
-    private void doTheDance(View view){
-        try {
-            mBTSocket.getOutputStream().write("0".getBytes());
-            mBTSocket.getOutputStream().flush();
-        } catch (Exception e) {
-
-        }
-        toast("Make that nigga dance!");
-    }
-
     private void toast(String message) {
         Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
@@ -270,51 +240,18 @@ public class BluetoothSettings extends Fragment {
             new Thread()
             {
                 public void run() {
-                    boolean fail = false;
-
-                    BluetoothDevice device = BluetoothSettingsRepository.getInstance().mBTAdapter.getRemoteDevice(address);
-
                     try {
-                        mBTSocket = createBluetoothSocket(device);
-                    } catch (IOException e) {
-                        fail = true;
-                        Toast.makeText(getActivity().getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
+                        BluetoothSettingsRepository.getInstance().connectTo(address, name, mHandler);
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity().getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                    // Establish the Bluetooth socket connection.
-                    try {
-                        mBTSocket.connect();
-                    } catch (IOException e) {
-                        try {
-                            fail = true;
-                            mBTSocket.close();
-                            mHandler.obtainMessage(BluetoothSettingsRepository.CONNECTING_STATUS, -1, -1)
-                                    .sendToTarget();
-                        } catch (IOException e2) {
-                            //insert code to deal with this
-                            Toast.makeText(getActivity().getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    if(fail == false) {
-                        mConnectedThread = new ConnectedThread(mBTSocket);
-                        mConnectedThread.start();
 
-                        mHandler.obtainMessage(BluetoothSettingsRepository.CONNECTING_STATUS, 1, -1, name)
-                                .sendToTarget();
-                    }
                 }
             }.start();
         }
     };
 
-    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-        try {
-            final Method m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", UUID.class);
-            return (BluetoothSocket) m.invoke(device, BTMODULEUUID);
-        } catch (Exception e) {
-            Log.e(TAG, "Could not create Insecure RFComm Connection",e);
-        }
-        return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
-    }
+
 
     private class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket;

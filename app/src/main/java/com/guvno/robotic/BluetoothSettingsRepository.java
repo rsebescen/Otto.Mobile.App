@@ -5,19 +5,29 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.guvno.robotic.exceptions.BluetoothNotActivatedException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.util.Set;
+import java.util.UUID;
 
 public class BluetoothSettingsRepository {
 
     public BluetoothAdapter mBTAdapter;
     private static BluetoothSettingsRepository _instance;
     public static Set<BluetoothDevice> mPairedDevices;
+
+    public BluetoothSocket mBTSocket = null; // bi-directional client-to-client data path
+
+    private final String TAG = MainActivity.class.getSimpleName();
+    private ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
+    private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
 
     // #defines for identifying shared types between calling functions
     public final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
@@ -52,6 +62,58 @@ public class BluetoothSettingsRepository {
         }
 
         throw new BluetoothNotActivatedException();
+    }
+
+    public void connectTo(String address, String name, Handler handler) throws Exception {
+        boolean fail = false;
+
+        BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
+
+        try {
+            mBTSocket = createBluetoothSocket(device);
+        } catch (IOException e) {
+            fail = true;
+        }
+        // Establish the Bluetooth socket connection.
+        try {
+            mBTSocket.connect();
+        } catch (IOException e) {
+            try {
+                fail = true;
+                mBTSocket.close();
+                handler.obtainMessage(BluetoothSettingsRepository.CONNECTING_STATUS, -1, -1)
+                        .sendToTarget();
+            } catch (IOException e2) {
+            }
+        }
+        if(fail) {
+            throw new Exception("Socket creation failed");
+        }
+        else {
+            mConnectedThread = new ConnectedThread(mBTSocket, handler);
+            mConnectedThread.start();
+
+            handler.obtainMessage(BluetoothSettingsRepository.CONNECTING_STATUS, 1, -1, name)
+                    .sendToTarget();
+        }
+    }
+    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
+        try {
+            final Method m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", UUID.class);
+            return (BluetoothSocket) m.invoke(device, BTMODULEUUID);
+        } catch (Exception e) {
+            Log.e(TAG, "Could not create Insecure RFComm Connection",e);
+        }
+        return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
+    }
+
+    public void send(String s) {
+        try {
+            mBTSocket.getOutputStream().write(s.getBytes());
+            mBTSocket.getOutputStream().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static class ConnectedThread extends Thread {
