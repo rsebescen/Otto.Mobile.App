@@ -19,6 +19,7 @@ public class OttoActions extends Fragment {
 
 
     private Button mDoTheDanceBtn;
+    private Button mDance;
 
     public OttoActions() {
         // Required empty public constructor
@@ -34,6 +35,7 @@ public class OttoActions extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_otto_actions, container, false);
 
         mDoTheDanceBtn = (Button)view.findViewById(R.id.doTheDance);
+        mDance = (Button)view.findViewById(R.id.Dance);
 
 
         mDoTheDanceBtn.setOnClickListener(new View.OnClickListener(){
@@ -43,6 +45,12 @@ public class OttoActions extends Fragment {
             }
         });
 
+        mDance.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                dance(v);
+            }
+        });
         return view;
     }
 
@@ -50,6 +58,10 @@ public class OttoActions extends Fragment {
     private void doTheDance(View view){
         BluetoothSettingsRepository.getInstance().send("1");
         toast("Make that nigga dance!");
+    }
+
+    private void dance(View view){
+        BluetoothSettingsRepository.getInstance().send("2");
     }
 
     private void toast(String message) {
