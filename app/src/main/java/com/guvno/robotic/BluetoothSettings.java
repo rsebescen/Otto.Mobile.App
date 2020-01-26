@@ -52,10 +52,8 @@ public class BluetoothSettings extends Fragment {
     private Button mOffBtn;
     private Button mListPairedDevicesBtn;
     private Button mDiscoverBtn;
-    private Button mDoTheDanceBtn;
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
-    private CheckBox mLED1;
 
     private static Handler mHandler; // Our main handler that will receive callback notifications
 
@@ -75,9 +73,7 @@ public class BluetoothSettings extends Fragment {
         mScanBtn = (Button)view.findViewById(R.id.scan);
         mOffBtn = (Button)view.findViewById(R.id.off);
         mDiscoverBtn = (Button)view.findViewById(R.id.discover);
-        mDoTheDanceBtn = (Button)view.findViewById(R.id.doTheDance);
         mListPairedDevicesBtn = (Button)view.findViewById(R.id.PairedBtn);
-        mLED1 = (CheckBox)view.findViewById(R.id.checkboxLED1);
 
         mBTArrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1);
 
