@@ -64,7 +64,7 @@ public class BluetoothSettingsRepository {
         throw new BluetoothNotActivatedException();
     }
 
-    public void connectTo(String address, String name, Handler handler) throws Exception {
+    public void connectTo(String address, String name, Handler handler) throws IOException {
         boolean fail = false;
 
         BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
@@ -87,7 +87,7 @@ public class BluetoothSettingsRepository {
             }
         }
         if(fail) {
-            throw new Exception("Socket creation failed");
+            throw new IOException("Socket creation failed");
         }
         else {
             mConnectedThread = new ConnectedThread(mBTSocket, handler);
