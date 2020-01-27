@@ -47,6 +47,16 @@ public class BluetoothSettingsRepository {
         return _instance;
     }
 
+    public boolean toggleBluetooth() {
+        if (mBTAdapter.isEnabled()) {
+            mBTAdapter.disable();
+        } else {
+            mBTAdapter.enable();
+        }
+
+        return mBTAdapter.isEnabled();
+    }
+
 
     public String[] listPairedDevices() throws BluetoothNotActivatedException {
         mPairedDevices = mBTAdapter.getBondedDevices();

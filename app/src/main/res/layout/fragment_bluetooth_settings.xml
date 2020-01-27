@@ -66,22 +66,14 @@
                 android:layout_alignTop="@+id/checkboxLED1" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/scan"
+        <Switch
+            android:id="@+id/bluetoothToggle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/off"
-            android:text="Bluetooth ON" />
-
-        <Button
-            android:id="@+id/off"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/scan"
-            android:layout_toEndOf="@+id/PairedBtn"
-            android:layout_toRightOf="@+id/PairedBtn"
-            android:text="Bluetooth OFF" />
+            android:checked="true"
+            android:text="Bluetooth"
+            android:textColorHighlight="#8BC34A"
+            android:textColorLink="#4CAF50" />
 
         <Button
             android:id="@+id/PairedBtn"

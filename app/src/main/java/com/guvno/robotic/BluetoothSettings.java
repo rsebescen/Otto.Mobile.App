@@ -31,8 +31,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.guvno.robotic.exceptions.BluetoothNotActivatedException;
 
@@ -49,8 +51,7 @@ public class BluetoothSettings extends Fragment {
 
     private TextView mBluetoothStatus;
     private TextView mReadBuffer;
-    private Button mScanBtn;
-    private Button mOffBtn;
+    private Switch mBluetoothToggle;
     private Button mListPairedDevicesBtn;
     private Button mDiscoverBtn;
     private ArrayAdapter<String> mBTArrayAdapter;
@@ -71,8 +72,8 @@ public class BluetoothSettings extends Fragment {
         
         mBluetoothStatus = (TextView)view.findViewById(R.id.bluetoothStatus);
         mReadBuffer = (TextView) view.findViewById(R.id.readBuffer);
-        mScanBtn = (Button)view.findViewById(R.id.scan);
-        mOffBtn = (Button)view.findViewById(R.id.off);
+        mBluetoothToggle = view.findViewById(R.id.bluetoothToggle);
+        mBluetoothToggle.setChecked(BluetoothSettingsRepository.getInstance().mBTAdapter.isEnabled());
         mDiscoverBtn = (Button)view.findViewById(R.id.discover);
         mListPairedDevicesBtn = (Button)view.findViewById(R.id.PairedBtn);
 
@@ -114,17 +115,10 @@ public class BluetoothSettings extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(),"Bluetooth device not found!",Toast.LENGTH_SHORT).show();
         }
         else {
-            mScanBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    bluetoothOn(v);
-                }
-            });
-
-            mOffBtn.setOnClickListener(new View.OnClickListener(){
+            mBluetoothToggle.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    bluetoothOff(v);
+                    toggleBluetooth(v);
                 }
             });
 
@@ -159,10 +153,11 @@ public class BluetoothSettings extends Fragment {
         }
     }
 
-    private void bluetoothOff(View view){
-        BluetoothSettingsRepository.getInstance().mBTAdapter.disable(); // turn off
-        mBluetoothStatus.setText("Bluetooth disabled");
-        Toast.makeText(getActivity().getApplicationContext(),"Bluetooth turned Off", Toast.LENGTH_SHORT).show();
+    private void toggleBluetooth(View view){
+
+        Boolean newState = BluetoothSettingsRepository.getInstance().toggleBluetooth();
+        mBluetoothStatus.setText(newState ? "Bluetooth enabled" : "Bluetooth disabled");
+        Toast.makeText(getActivity().getApplicationContext(),newState ? "Bluetooth turned On" : "Bluetooth turned Off", Toast.LENGTH_SHORT).show();
     }
 
     private void discover(View view){
@@ -227,15 +222,32 @@ public class BluetoothSettings extends Fragment {
             final String name = info.substring(0,info.length() - 17);
 
             // Spawn a new thread to avoid blocking the GUI one
+
             new Thread()
             {
                 public void run() {
                     try {
-                        BluetoothSettingsRepository.getInstance().connectTo(address, name, mHandler);
-                    } catch (IOException e) {
-                        //Toast.makeText(getActivity().getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                        synchronized (this) {
+                            wait(500);
 
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        mDevicesListView.setEnabled(false);
+                                        BluetoothSettingsRepository.getInstance().connectTo(address, name, mHandler);
+                                    } catch (IOException e) {
+                                        Toast.makeText(getActivity().getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    mDevicesListView.setEnabled(true);
+                                }
+                            });
+
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }.start();
         }
