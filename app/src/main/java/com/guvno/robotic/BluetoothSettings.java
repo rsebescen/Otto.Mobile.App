@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +54,7 @@ public class BluetoothSettings extends Fragment {
     private Button mListPairedDevicesBtn;
     private Button mDiscoverBtn;
     private ArrayAdapter<String> mBTArrayAdapter;
-    private ListView mDevicesListView;
+    private Spinner mDevicesListView;
 
     private static Handler mHandler; // Our main handler that will receive callback notifications
 
@@ -77,9 +78,9 @@ public class BluetoothSettings extends Fragment {
 
         mBTArrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1);
 
-        mDevicesListView = (ListView)view.findViewById(R.id.devicesListView);
+        mDevicesListView = (Spinner)view.findViewById(R.id.devicesListView);
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
-        mDevicesListView.setOnItemClickListener(mDeviceClickListener);
+        mDevicesListView.setOnItemSelectedListener(mDeviceClickListener);
 
         // Ask for location permission if not already allowed
         if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -211,8 +212,8 @@ public class BluetoothSettings extends Fragment {
         }
     }
 
-    private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
+    private AdapterView.OnItemSelectedListener mDeviceClickListener = new AdapterView.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> av, View v, int arg2, long arg3) {
 
             if(!BluetoothSettingsRepository.getInstance().mBTAdapter.isEnabled()) {
                 Toast.makeText(getActivity().getBaseContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
@@ -231,12 +232,17 @@ public class BluetoothSettings extends Fragment {
                 public void run() {
                     try {
                         BluetoothSettingsRepository.getInstance().connectTo(address, name, mHandler);
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity().getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        //Toast.makeText(getActivity().getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 }
             }.start();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
         }
     };
 
