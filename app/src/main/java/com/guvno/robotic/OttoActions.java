@@ -41,26 +41,26 @@ public class OttoActions extends Fragment {
         mDoTheDanceBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                doTheDance(v);
+                doTheDance();
             }
         });
 
         mDance.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                dance(v);
+                dance();
             }
         });
         return view;
     }
 
 
-    private void doTheDance(View view){
+    private void doTheDance(){
         BluetoothSettingsRepository.getInstance().send("1");
         toast("Make that nigga dance!");
     }
 
-    private void dance(View view){
+    private void dance(){
         BluetoothSettingsRepository.getInstance().send("2");
     }
 
