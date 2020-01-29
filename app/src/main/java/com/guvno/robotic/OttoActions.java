@@ -1,10 +1,6 @@
 package com.guvno.robotic;
-
-
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +30,8 @@ public class OttoActions extends Fragment {
 
         View view =  inflater.inflate(R.layout.fragment_otto_actions, container, false);
 
-        mDoTheDanceBtn = (Button)view.findViewById(R.id.doTheDance);
-        mDance = (Button)view.findViewById(R.id.Dance);
-
+        mDoTheDanceBtn = view.findViewById(R.id.doTheDance);
+        mDance = view.findViewById(R.id.Dance);
 
         mDoTheDanceBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -51,6 +46,12 @@ public class OttoActions extends Fragment {
                 dance();
             }
         });
+
+        if(BluetoothSettingsRepository.getInstance().mBTSocket == null){
+            mDoTheDanceBtn.setEnabled(false);
+            mDance.setEnabled(false);
+        }
+
         return view;
     }
 
