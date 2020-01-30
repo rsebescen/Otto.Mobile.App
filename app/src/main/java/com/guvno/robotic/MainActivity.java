@@ -1,20 +1,30 @@
 package com.guvno.robotic;
 
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,6 +59,57 @@ public class MainActivity extends AppCompatActivity
             navigationView.setNavigationItemSelectedListener(this);
         }
 
+        final TextView mBluetoothStatus = findViewById(R.id.connectivityStatus);
+        final Handler mHandler = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                if (msg.what == BluetoothSettingsRepository.MESSAGE_READ) {
+                    String readMessage = null;
+                    try {
+                        readMessage = new String((byte[]) msg.obj, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    //mReadBuffer.setText(readMessage);
+                }
+
+                if (msg.what == BluetoothSettingsRepository.CONNECTING_STATUS) {
+                    if (msg.arg1 == 1)
+                        mBluetoothStatus.setText("Connected");
+                    else
+                        mBluetoothStatus.setText("Connection Failed");
+                }
+            }
+        };
+        new Thread() {
+            public void run() {
+                while (true) {
+                    try {
+                        synchronized (this) {
+                            wait(2000);
+
+                                    try {
+                                        if (BluetoothSettingsRepository.getInstance().mBTSocket != null && BluetoothSettingsRepository.getInstance().mBTSocket.isConnected())
+                                            return;
+                                        mBluetoothStatus.setText("Connecting...");
+                                        String name = "HC-05";
+                                        String address = "00:21:13:04:3C:F1";
+
+//                                if (BluetoothSettingsRepository.getInstance().isDeviceInRange(name, address)) {
+                                        BluetoothSettingsRepository.getInstance().connectTo(address, name, mHandler);
+//                              }
+
+//
+                                    } catch (Exception e) {
+//                                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new Notifications()).commit();
@@ -98,8 +159,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.actions) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new OttoActions()).commit();
-        }
-        else if (id == R.id.dialog){
+        } else if (id == R.id.dialog) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new Dialog()).commit();
         }

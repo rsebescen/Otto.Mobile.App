@@ -12,7 +12,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-public class Dialog  extends Fragment {
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+public class Dialog extends Fragment {
 
     Button dialogButton;
     AlertDialog.Builder builder;
@@ -33,9 +36,9 @@ public class Dialog  extends Fragment {
 
         dialogButton = view.findViewById(R.id.shodDialog);
 
-        dialogButton.setOnClickListener(new View.OnClickListener(){
+        dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 showDialog();
             }
         });
@@ -44,16 +47,16 @@ public class Dialog  extends Fragment {
     }
 
 
-    private void showDialog(){
+    private void showDialog() {
         //Uncomment the below code to Set the message and title from the strings.xml file
-        builder.setMessage(R.string.dialog_message) .setTitle(R.string.dialog_title);
+        builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);
 
         builder.setCancelable(false)
                 .setNegativeButton("Necu", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
                         dialog.cancel();
-                        Toast.makeText(getContext(),"you have chosen death",
+                        Toast.makeText(getContext(), "you have chosen death",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -63,7 +66,6 @@ public class Dialog  extends Fragment {
         alert.setTitle(R.string.dialog_title);
         alert.show();
     }
-
 
 
 }
