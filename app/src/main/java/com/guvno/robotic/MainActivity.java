@@ -99,6 +99,10 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new OttoActions()).commit();
         }
+        else if (id == R.id.dialog){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new Dialog()).commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

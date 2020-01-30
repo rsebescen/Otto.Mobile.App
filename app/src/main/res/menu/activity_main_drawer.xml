@@ -12,6 +12,11 @@
             android:id="@+id/actions"
             android:icon="@drawable/ic_actions"
             android:title="Actions" />
+        <item
+            android:id="@+id/dialog"
+            android:icon="@drawable/ic_actions"
+            android:title="Dialog" />
+
     </group>
 
 </menu>
