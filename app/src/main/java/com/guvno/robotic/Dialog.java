@@ -49,13 +49,12 @@ public class Dialog  extends Fragment {
         builder.setMessage(R.string.dialog_message) .setTitle(R.string.dialog_title);
 
         //Setting message manually and performing action on button click
-        builder.setMessage("opa dialog")
-                .setCancelable(false)
+        builder.setCancelable(false)
                 .setNegativeButton("Necu", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
                         dialog.cancel();
-                        Toast.makeText(getContext(),"you choose no action for alertbox",
+                        Toast.makeText(getContext(),"you have chosen death",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
