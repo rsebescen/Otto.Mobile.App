@@ -1,5 +1,8 @@
 package com.guvno.robotic;
+import android.content.DialogInterface;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ public class OttoActions extends Fragment {
 
     private Button mDoTheDanceBtn;
     private Button mDance;
+    AlertDialog.Builder builder;
 
     public OttoActions() {
         // Required empty public constructor
@@ -49,7 +53,7 @@ public class OttoActions extends Fragment {
 
         if(BluetoothSettingsRepository.getInstance().mBTSocket == null){
             mDoTheDanceBtn.setEnabled(false);
-            mDance.setEnabled(false);
+           // mDance.setEnabled(false);
         }
 
         return view;
@@ -62,11 +66,37 @@ public class OttoActions extends Fragment {
     }
 
     private void dance(){
-        BluetoothSettingsRepository.getInstance().send("2");
+        if (BluetoothSettingsRepository.getInstance().mBTSocket == null){
+            showDialog();
+        }
+        else {
+            BluetoothSettingsRepository.getInstance().send("2");
+        }
     }
 
     private void toast(String message) {
         Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showDialog(){
+        builder = new AlertDialog.Builder(getContext());
+        //Uncomment the below code to Set the message and title from the strings.xml file
+        builder.setMessage("Plavi zub iskljucen") .setTitle("nece bez plavog zuba");
+
+        builder.setCancelable(false)
+                .setNegativeButton("Plavi zub", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //  Action for 'NO' Button
+                        dialog.cancel();
+                     //   getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                          //      new BluetoothSettings()).commit();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.setTitle(R.string.dialog_title);
+        alert.show();
     }
 
 }

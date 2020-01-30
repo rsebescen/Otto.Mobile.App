@@ -31,7 +31,7 @@ public class Dialog  extends Fragment {
 
         builder = new AlertDialog.Builder(getContext());
 
-        dialogButton = (Button)view.findViewById(R.id.shodDialog);
+        dialogButton = view.findViewById(R.id.shodDialog);
 
         dialogButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -48,7 +48,6 @@ public class Dialog  extends Fragment {
         //Uncomment the below code to Set the message and title from the strings.xml file
         builder.setMessage(R.string.dialog_message) .setTitle(R.string.dialog_title);
 
-        //Setting message manually and performing action on button click
         builder.setCancelable(false)
                 .setNegativeButton("Necu", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
