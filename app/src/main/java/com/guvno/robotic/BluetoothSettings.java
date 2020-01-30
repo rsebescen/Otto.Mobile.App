@@ -57,7 +57,7 @@ public class BluetoothSettings extends Fragment {
     private ArrayAdapter<String> mBTArrayAdapter;
     private Spinner mDevicesListView;
 
-    private static Handler mHandler; // Our main handler that will receive callback notifications
+    private static Handler mHandler; // Our main handler that will receive callback fragment_notifications
 
 
     public BluetoothSettings() {

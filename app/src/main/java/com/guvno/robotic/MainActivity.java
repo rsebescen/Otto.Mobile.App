@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+
         if (toolbar != null) {
             setSupportActionBar(toolbar);
 
@@ -46,6 +48,10 @@ public class MainActivity extends AppCompatActivity
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
         }
+
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new Notifications()).commit();
     }
 
     @Override
