@@ -3,48 +3,34 @@ package com.guvno.robotic;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.guvno.robotic.exceptions.BluetoothNotActivatedException;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
-import java.util.Set;
-import java.util.UUID;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 
 public class BluetoothSettings extends Fragment {
@@ -136,6 +122,37 @@ public class BluetoothSettings extends Fragment {
                 }
             });
         }
+
+        new Thread()
+        {
+            public void run() {
+            try {
+                synchronized (this) {
+                    wait(2000);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (BluetoothSettingsRepository.getInstance().mBTSocket.isConnected()) return;
+                                String name = "";
+                                String address = "";
+
+                                if (BluetoothSettingsRepository.getInstance().isDeviceInRange(name, address)) {
+                                    BluetoothSettingsRepository.getInstance().connectTo(address, name, mHandler);
+                                }
+                            } catch (IOException e) {
+                                Toast.makeText(getActivity().getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        }.start();
 
         return view;
     }

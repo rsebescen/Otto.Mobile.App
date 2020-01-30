@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_android"/>
         <Button
-            android:id="@+id/Dance"
+            android:id="@+id/dance"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:text="Dance"

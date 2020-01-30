@@ -47,6 +47,18 @@ public class BluetoothSettingsRepository {
         return _instance;
     }
 
+    public boolean isDeviceInRange(String name, String deviceAddress) {
+        mPairedDevices = mBTAdapter.getBondedDevices();
+        if(mBTAdapter.isEnabled()) {
+            for (BluetoothDevice device : mPairedDevices) {
+                if (device.getAddress().equals(deviceAddress)
+                && device.getName().equals(name)) return true;
+            }
+        }
+
+        return false;
+    }
+
     public boolean toggleBluetooth() {
         if (mBTAdapter.isEnabled()) {
             mBTAdapter.disable();

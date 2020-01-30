@@ -35,7 +35,7 @@ public class OttoActions extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_otto_actions, container, false);
 
         mDoTheDanceBtn = view.findViewById(R.id.doTheDance);
-        mDance = view.findViewById(R.id.Dance);
+        mDance = view.findViewById(R.id.dance);
 
         mDoTheDanceBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -88,8 +88,8 @@ public class OttoActions extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
                         dialog.cancel();
-                     //   getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                          //      new BluetoothSettings()).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                new BluetoothSettings()).commit();
                     }
                 });
         //Creating dialog box
