@@ -9,15 +9,17 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+//import org.springframework.http.converter.StringHttpMessageConverter;
+//import org.springframework.web.client.RestTemplate;
 
 public class Dialog extends Fragment {
 
     Button dialogButton;
+    Button alertDialogButton;
     AlertDialog.Builder builder;
 
     public Dialog() {
@@ -26,7 +28,7 @@ public class Dialog extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -35,6 +37,7 @@ public class Dialog extends Fragment {
         builder = new AlertDialog.Builder(getContext());
 
         dialogButton = view.findViewById(R.id.shodDialog);
+        alertDialogButton = view.findViewById(R.id.alertDialog);
 
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,9 +46,16 @@ public class Dialog extends Fragment {
             }
         });
 
+        alertDialogButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                CustomDialog d = new CustomDialog(getContext());
+                d.show();
+            }
+        });
+
         return view;
     }
-
 
     private void showDialog() {
         //Uncomment the below code to Set the message and title from the strings.xml file
@@ -66,6 +76,4 @@ public class Dialog extends Fragment {
         alert.setTitle(R.string.dialog_title);
         alert.show();
     }
-
-
 }
